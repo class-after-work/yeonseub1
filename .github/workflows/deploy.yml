@@ -13,19 +13,23 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          path: main
 
       - name: Setup Node
         uses: actions/setup-node@v3
+        with:
+          path: main
 
       - name: Install dependencies
         uses: yarn install
         with:
-          ref: main
+          path: main
 
       - name: Build project
         run: yarn build
         with:
-          ref: main
+          path: main
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v3
