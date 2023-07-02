@@ -19,9 +19,13 @@ jobs:
 
       - name: Install dependencies
         uses: yarn install
+        with:
+          ref: main
 
       - name: Build project
         run: yarn build
+        with:
+          ref: main
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v3
