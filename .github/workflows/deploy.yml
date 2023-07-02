@@ -6,51 +6,27 @@ on:
       - main
 
 jobs:
-  build:
-    name: Build
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-        with:
-          path: main
+      - name: Checkout source code
+        uses: actions/checkout@master
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@master
         with:
-          path: main
+          node-version: 14.x
 
       - name: Install dependencies
-        uses: yarn install
-        with:
-          path: main
+        run: yarn install
 
-      - name: Build project
+      - name: Build page
         run: yarn build
-        with:
-          path: main
+        env:
+          NODE_ENV: production
 
-      - name: Upload production-ready build files
-        uses: actions/upload-artifact@v3
-        with:
-          name: production-files
-          path: ./dist
-
-  deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: production-files
-          path: ./dist
-
-      - name: Deploy to GitHub Pages
+      - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
